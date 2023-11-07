@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from "react";
 import "./Navbar.scss";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   
   const [active,setActive]= useState(false);
   const [open,setOpen]= useState(false);
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   const isActive = ()=>{
   window.scrollY > 0 ? setActive(true) : setActive(false)
@@ -25,6 +26,11 @@ const Navbar = () => {
     username:"Nadia",
     isSeller:true
   }
+
+  function handleLogin() {
+    navigate("/login");
+  }
+
   return (
     <div className= {active || pathname !== "/" ? "navbar active" : "navbar"}>
        <div className="container">
@@ -38,7 +44,7 @@ const Navbar = () => {
         <div className="links">
          
           <span>Explore</span>
-          <span>Sign in</span>
+          <button onClick={handleLogin}>Sign in</button>
          {!currentUser?.isSeller && <span>Become a Seller</span>}
          { !currentUser &&<button>Join</button>}
           {currentUser &&

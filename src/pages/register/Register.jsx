@@ -1,9 +1,28 @@
 import React from "react";
 import "./Register.scss"
-const Register = () => {
+import SignUp from "./SignUp";
+
+function Register() {
+    
     return (
-        < div className="register">Register
+        < div className="login" style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            background: "#03045e",
+        }}>
+            <div style={{
+                width: "50%",
+                height: "100%",
+                background: "white",
+                margin: "15px 0",
+                borderRadius: 4,
+                paddingBottom: "40px"
+            }}>
+                <SignUp />
+            </div>
         </ div>
     )
-}
-export default Register
+};
+
+export default Register;

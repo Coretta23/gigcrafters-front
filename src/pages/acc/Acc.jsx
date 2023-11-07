@@ -7,24 +7,23 @@ import CatCard from "../../components/navbar/catCard/CatCard";
 import { cards, projects } from "../data";
 import ProjectCard from "../../components/navbar/projectCard/ProjectCard";
 const Acc = () => {
-    return (
-   <div>
-    <Feature />
-        <Trusted />
-        <Slide slidesToShow={5} arrowsScroll={5}>
+  return (
+    <div>
+      <Feature />
+      <Trusted />
+      
+      <Slide slidesToShow={5} arrowsScroll={5}>
         {cards.map((card) => (
           <CatCard key={card.id} card={card} />
         ))}
       </Slide>
-
-     
+    
       <Slide slidesToShow={5} arrowsScroll={5}>
         {projects.map((card) => (
           <ProjectCard key={card.id} card={card} />
         ))}
       </Slide>
-     </div>
-            
-    )
+    </div>
+  )
 }
 export default Acc

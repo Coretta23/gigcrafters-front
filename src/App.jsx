@@ -1,9 +1,10 @@
 import "./app.scss";
 
-import { createBrowserRouter, Outlet, RouterProvider } from "react-router-dom";
 import React from "react";
-import Navbar from "./components/navbar/Navbar";
-import Footer from "./components/navbar/footer/Footer";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { AppProvider } from "./utils/context";
+import Layout from "./components/navbar/layout/Layout";
+import ErrorPage from "./pages/errorPage";
 import Acc from "./pages/acc/Acc";
 import Gigs from "./pages/gigs/Gigs";
 import Gig from "./pages/gig/Gig";
@@ -16,66 +17,29 @@ import Message from "./pages/message/Message";
 import MyGigs from "./pages/myGigs/MyGigs";
 
 function App() {
-  const Layout = () => {
-    return (
-      <div className="app">
-        <Navbar />
-        <Outlet />
-        <Footer />
-      </div>
-    );
-  };
+  return (
+    <Router>
+      <AppProvider>
+        <Routes>
 
-  const router = createBrowserRouter([
-    {
-      path: "/",
-      element: <Layout />,
-      children: [
-        {
-          path: "/",
-          element: <Acc />,
-        },
-        {
-          path: "/gigs",
-          element: <Gigs />,
-        },
-        {
-          path: "/myGigs",
-          element: <MyGigs />,
-        },
-        {
-          path: "/orders",
-          element: <Orders />,
-        },
-        {
-          path: "/messages",
-          element: <Messages />,
-        },
-        {
-          path: "/message/:id",
-          element: <Message />,
-        },
-        {
-          path: "/add",
-          element: <Add />,
-        },
-        {
-          path: "/gig/:id",
-          element: <Gig />,
-        },
-      ],
-    },
-    {
-      path: "/register",
-      element: <Register />,
-    },
-    {
-      path: "/login",
-      element: <Login />,
-    },
-  ]);
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Acc />} />
+            <Route path="/login" element={<Login />}/>
+            <Route path="/register" element={<Register />}/>
+            <Route path="/gigs" element={<Gigs />} />
+            <Route path="/myGigs" element={<MyGigs />} />
+            <Route path="/orders" element={<Orders />} />
+            <Route path="/messages" element={<Messages />} />
+            <Route path="/message/:id" element={<Message />} />
+            <Route path="/add" element={<Add />} />
+            <Route path="/gig/:id" element={<Gig />} />
+          </Route>
 
-  return <RouterProvider router={router} />;
-}
+          <Route path="*" element={<ErrorPage />} />
+        </Routes>
+      </AppProvider>
+    </Router>
+  )
+};
 
 export default App;

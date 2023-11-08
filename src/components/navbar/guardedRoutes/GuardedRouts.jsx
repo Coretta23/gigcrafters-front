@@ -1,16 +1,20 @@
-import { Route, Redirect } from "react-router-dom";
+import { Route, useNavigate } from "react-router-dom";
 
-function GuardedRoutes({ component: Component, allowedRoles, userRoles, ...rest }) {
+function GuardedRoutes({ component: Component, allowedRoles, userRole, ...rest }) {
+    const navigate = useNavigate();
+
     return (
         <Route
           {...rest}
           render={(props) => {
-            if (userRoles.some((role) => allowedRoles.includes(role))) {
+            if (allowedRoles.includes(userRole)) {
               return <Component {...props} />;
-            } else if (!userRoles) {
-                return <Redirect to="/login" />;
+            } else if (!userRole) {
+                navigate("/login")
+                return null;
             } else {
-              return <Redirect to="/unauthorized" />;
+                navigate("/unauthorized")
+                return null;
             }
           }}
         />

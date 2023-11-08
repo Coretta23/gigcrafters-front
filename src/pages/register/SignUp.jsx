@@ -12,41 +12,64 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import Loader from '../../components/navbar/loader/Loader';
+import { useContext } from 'react';
+import { AppContext } from '../../utils/context';
 
 export default function SignUp() {
+    const [data, setData] = useState({});
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState({});
+    const { setLoggedUser } = useContext(AppContext);
+
     const navigate = useNavigate()
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-        firstName: data.get('firstName'),
-        LastName: data.get('lastName'),
-        email: data.get('email'),
-        password: data.get('password'),
-        });
+        setIsLoading(true);
 
-        async function fetchData() {
+        const data = new FormData(event.currentTarget);
+
+        const sentData = {
+            name: data.get('name'),
+            email: data.get('email'),
+            password: data.get('password'),
+            role: "client"
+        };
+
+        async function fetchData(url, subData, method) {
             try {
-                const response = await fetch("http://127.0.0.1:8000/api/register", {
+                const response = await fetch(url, {
                     headers: {
                         "Content-Type": "application/json",
+                        "Accept": "application/json"
                     },
-                    method: POST,
-                    data: data
+                    method: method,
+                    body: JSON.stringify(subData)
                 });
 
                 const data = await response.json();
+                setData(data)
+                setLoggedUser(data?.data);
+                localStorage.setItem("currentUser", JSON.stringify(data?.data));
 
-                if(data.status === 200) {
-                    navigate("/gigs")
+                if(data?.data) {
+                    navigate("/")
                 } else {
                     console.log("Register Error :", data);
                 }
             } catch (error) {
+                setError(true);
                 console.log("Register Error :", error);
+            } finally {
+                setIsLoading(false);
             }
         };
+
+        console.log("datas :", sentData);
+
+        fetchData("http://127.0.0.1:8000/api/register", sentData, "POST");
     };
 
   return (
@@ -71,10 +94,10 @@ export default function SignUp() {
                 <Grid item xs={12} sm={12}>
                     <TextField
                         autoComplete="given-name"
-                        name="Name"
+                        name="name"
                         required
                         fullWidth
-                        id="Name"
+                        id="name"
                         label="Nom"
                         autoFocus
                     />
@@ -112,7 +135,14 @@ export default function SignUp() {
                 fullWidth
                 variant="contained"
                 sx={{ mt: 3, mb: 2 }}
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 20
+                }}
             >
+                {isLoading && <Loader />}
                 Sign Up
             </Button>
             <Grid container justifyContent="flex-end">

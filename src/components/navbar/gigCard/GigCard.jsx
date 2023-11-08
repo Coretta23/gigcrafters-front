@@ -6,13 +6,13 @@ const GigCard = ({ item }) => {
   return (
     <Link to="/gig/123" className="link">
       <div className="gigCard">
-        <img src={item.img} alt="" />
+        <img src={item.coverimage} alt="" />
         <div className="info">
           <div className="user">
             <img src={item.pp} alt="" />
-            <span>{item.username}</span>
+            <span>{item.name}</span>
           </div>
-          <p>{item.desc}</p>
+          <p>{item.description}</p>
           <div className="star">
             <img src="./img/star.png" alt="" />
             <span>{item.star}</span>
@@ -24,8 +24,7 @@ const GigCard = ({ item }) => {
           <div className="price">
             <span>STARTING AT</span>
             <h2>
-              $ {item.price}
-              <sup>99</sup>
+              {item.price} Fr cfa
             </h2>
           </div>
         </div>

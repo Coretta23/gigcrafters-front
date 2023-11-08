@@ -3,6 +3,7 @@ import "./app.scss";
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import { AppProvider } from "./utils/context";
+import GuardedRoutes from "./components/navbar/guardedRoutes/GuardedRouts";
 import Layout from "./components/navbar/layout/Layout";
 import ErrorPage from "./pages/errorPage";
 import Acc from "./pages/acc/Acc";
@@ -17,6 +18,15 @@ import Message from "./pages/message/Message";
 import MyGigs from "./pages/myGigs/MyGigs";
 
 function App() {
+  // let userRole;
+  // const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+
+  // if (currentUser) {
+  //   userRole = currentUser?.user?.role;
+  // } else {
+  //   userRole = "unknown"
+  // }
+
   return (
     <Router>
       <AppProvider>
@@ -27,6 +37,12 @@ function App() {
             <Route path="/login" element={<Login />}/>
             <Route path="/register" element={<Register />}/>
             <Route path="/gigs" element={<Gigs />} />
+            {/* <GuardedRoutes
+              path="/gigs"
+              component={<Gigs />}
+              allowedRoles={["client", "marchand", "admin"]}
+              userRole={userRole}
+            /> */}
             <Route path="/myGigs" element={<MyGigs />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/messages" element={<Messages />} />

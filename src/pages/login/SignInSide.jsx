@@ -11,15 +11,63 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import Loader from '../../components/navbar/loader/Loader';
+import { useContext } from 'react';
+import { AppContext } from '../../utils/context';
 
 export default function SignIn() {
+  const [data, setData] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState({});
+  const { setLoggedUser } = useContext(AppContext);
+
+  const navigate = useNavigate()
+
   const handleSubmit = (event) => {
     event.preventDefault();
+    setIsLoading(true);
+
     const data = new FormData(event.currentTarget);
-    console.log({
+    
+    const sentData = {
       email: data.get('email'),
-      password: data.get('password'),
-    });
+      password: data.get('password')
+    };
+
+    async function fetchData(url, subData, method) {
+      try {
+        const response = await fetch(url, {
+            headers: {
+                "Content-Type": "application/json",
+                "Accept": "application/json"
+            },
+            method: method,
+            body: JSON.stringify(subData)
+        });
+
+        const data = await response.json();
+        setData(data)
+        setLoggedUser(data?.data);
+        localStorage.setItem("currentUser", JSON.stringify(data?.data));
+
+        if(data?.data) {
+            navigate("/")
+        } else {
+            console.log("Register Error :", data);
+        }
+      } catch (error) {
+          setError(true);
+          console.log("Register Error :", error);
+      } finally {
+          setIsLoading(false);
+      }
+    };
+
+    console.log("datas :", sentData);
+
+    fetchData("http://127.0.0.1:8000/api/login", sentData, "POST");
   };
 
   return (
@@ -69,7 +117,14 @@ export default function SignIn() {
             fullWidth
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: 20
+            }}
           >
+            {isLoading && <Loader />}
             Sign In
           </Button>
           <Grid container>
